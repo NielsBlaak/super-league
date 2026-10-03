@@ -1,0 +1,41 @@
+.wrapper,
+.form,
+.saved {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.saved {
+  align-items: flex-start;
+}
+
+.steps {
+  padding-left: 1.25rem;
+  list-style: decimal;
+}
+
+.label {
+  font-weight: 700;
+}
+
+.input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0 0.75rem;
+  border: 1.5px solid var(--ink-soft);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  /* 16 px stops the zoom of iOS on focus. */
+  font-size: 1rem;
+}
+
+.error {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.note {
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}

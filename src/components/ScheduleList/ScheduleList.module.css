@@ -1,0 +1,75 @@
+.rounds {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.roundTitle {
+  padding-bottom: 0.375rem;
+  border-bottom: 1px solid var(--ink);
+  font-size: 1.125rem;
+}
+
+/* Each match is a button. The score is in the centre. */
+.match {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0.375rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  /* A little narrower: more club names fit on one line on a phone. */
+  font-stretch: 85%;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.match:focus-visible {
+  outline-offset: -3px;
+}
+
+.home,
+.away {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.home {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.score {
+  min-width: 3.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-stretch: 75%;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.match[data-state="open"] .score {
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+/* The next match has a filled score mark. */
+.match[data-state="next"] .score {
+  background: var(--ink);
+  color: var(--ground);
+}
+
+@media (min-width: 600px) {
+  .match {
+    gap: 0.75rem;
+    font-size: 1rem;
+  }
+}

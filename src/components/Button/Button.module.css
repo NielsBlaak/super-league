@@ -1,0 +1,38 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0 1.25rem;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.primary {
+  background: var(--ink);
+  color: var(--ground);
+}
+
+.quiet {
+  border-color: var(--ink);
+  background: none;
+  color: var(--ink);
+}
+
+.danger {
+  border-color: var(--danger);
+  background: none;
+  color: var(--danger);
+}
+
+.fill {
+  flex: 1;
+}

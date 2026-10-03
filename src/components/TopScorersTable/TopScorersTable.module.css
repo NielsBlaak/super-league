@@ -1,0 +1,22 @@
+.scorer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.player {
+  font-weight: 600;
+}
+
+.club {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+
+.club > span {
+  width: 0.625rem;
+  height: 0.875rem;
+}

@@ -1,0 +1,65 @@
+/* Shared by the standings table and the top scorers table. */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 0.6875rem 0.25rem;
+  border-bottom: 1px solid var(--line);
+  font-weight: 400;
+  text-align: right;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.table thead th {
+  border-bottom-color: var(--ink);
+  color: var(--ink-soft);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.table .rank {
+  width: 2rem;
+  padding-left: 0;
+  color: var(--ink-soft);
+  font-stretch: 75%;
+  font-weight: 700;
+  text-align: left;
+}
+
+/* The column with the name takes the free width. */
+.table .main {
+  width: 100%;
+  white-space: normal;
+  text-align: left;
+}
+
+.table .num {
+  min-width: 2.375rem;
+}
+
+.table .strong {
+  padding-right: 0;
+  font-weight: 800;
+}
+
+.team {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.legend {
+  margin-top: 0.75rem;
+  color: var(--ink-soft);
+  font-size: 0.8125rem;
+}
+
+.empty {
+  color: var(--ink-soft);
+}

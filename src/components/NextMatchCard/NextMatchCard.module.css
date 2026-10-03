@@ -1,0 +1,161 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+/* The whole card is one button. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+}
+
+.card:focus-visible {
+  outline-offset: 4px;
+}
+
+/* The scarf: one half for each club. The margin gives room to the fringe. */
+.scarf {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-inline: 0.5rem;
+}
+
+.scarf[data-clubs="1"] {
+  grid-template-columns: 1fr;
+}
+
+.half {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8.5rem;
+  padding: 1.75rem 0.625rem;
+  /* Top layer: the ribs of the knit. Bottom layer: the club colour with two bars. */
+  background:
+    repeating-linear-gradient(90deg, rgb(0 0 0 / 0.07) 0 1px, transparent 1px 4px),
+    linear-gradient(
+      to bottom,
+      var(--team-primary) 0 0.5rem,
+      var(--team-secondary) 0.5rem 1.125rem,
+      var(--team-primary) 1.125rem calc(100% - 1.125rem),
+      var(--team-secondary) calc(100% - 1.125rem) calc(100% - 0.5rem),
+      var(--team-primary) calc(100% - 0.5rem)
+    );
+  /* The outline keeps a white club colour visible on the light background. */
+  box-shadow: inset 0 0 0 1px rgb(18 38 29 / 0.14);
+  color: var(--team-text);
+  text-align: center;
+}
+
+/* The fringe on the two ends of the scarf. */
+.half:first-child::before,
+.half:last-child::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0.5rem;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--team-primary) 0 3px,
+    transparent 3px 5px,
+    var(--team-secondary) 5px 8px,
+    transparent 8px 10px
+  );
+}
+
+.half:first-child::before {
+  right: 100%;
+}
+
+.half:last-child::after {
+  left: 100%;
+}
+
+/* The two halves come together when a new match shows. */
+.half:first-child {
+  animation: from-left 480ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.half:last-child {
+  animation: from-right 480ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.scarf[data-clubs="1"] .half {
+  animation: none;
+}
+
+@keyframes from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-1.5rem);
+  }
+}
+
+@keyframes from-right {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+}
+
+.name {
+  font-stretch: 62%;
+  font-size: clamp(1.625rem, 7.4vw, 3.5rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.round {
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+.cta {
+  display: grid;
+  place-items: center;
+  min-height: 3rem;
+  padding: 0 1.5rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--ground);
+  font-weight: 700;
+}
+
+.message {
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+.message:empty {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .half {
+    min-height: 11rem;
+  }
+
+  .meta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
