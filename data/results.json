@@ -1,4 +1,19 @@
 {
   "version": 1,
-  "results": {}
+  "results": {
+    "int-ars": {
+      "home": 1,
+      "away": 1,
+      "goals": [
+        {
+          "team": "int",
+          "playerId": 228093
+        },
+        {
+          "team": "ars",
+          "playerId": 241651
+        }
+      ]
+    }
+  }
 }
