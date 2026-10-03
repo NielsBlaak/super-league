@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { logos } from "@/data/logos";
 import { squads } from "@/data/squads";
 import { teams } from "@/data/teams";
 import { INK, readableTextColor } from "./contrast";
@@ -40,6 +41,11 @@ describe("teams and squads", () => {
       const grouped = groupByLine(squads[team.id]).flatMap((line) => line.players);
       expect(grouped).toHaveLength(squads[team.id].length);
     }
+  });
+
+  it("has a logo for each team", () => {
+    expect(Object.keys(logos).sort()).toEqual(teams.map((team) => team.id).sort());
+    for (const team of teams) expect(logos[team.id]).toBeTruthy();
   });
 
   it("has valid colour codes", () => {

@@ -1,0 +1,14 @@
+/* Phone: room for the tab bar at the bottom of the screen. */
+.footer {
+  max-width: 46rem;
+  margin-inline: auto;
+  padding: 0 var(--gutter) calc(var(--tabbar) + env(safe-area-inset-bottom) + 1.5rem);
+  color: var(--ink-soft);
+  font-size: 0.8125rem;
+}
+
+@media (min-width: 600px) {
+  .footer {
+    padding: 0 1.5rem 2.5rem;
+  }
+}

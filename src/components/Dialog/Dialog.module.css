@@ -53,10 +53,15 @@
 }
 
 .body {
+  /* Children can use this value, for example for an element that sticks at the top. */
+  --body-pad: 1rem;
+
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 1rem var(--gutter) 1.5rem;
+  /* The space of the scrollbar is always there, so the content does not move when the scrollbar appears. */
+  scrollbar-gutter: stable;
+  padding: var(--body-pad) var(--gutter) 1.5rem;
 }
 
 .footer {
@@ -67,18 +72,22 @@
   background: var(--surface);
 }
 
-/* Larger screens: a centred window. */
+/*
+ * Larger screens: a window that is centred from left to right.
+ * The top edge has a fixed place. A window that is centred from top to bottom moves up
+ * when its content grows, and then the buttons in it move away from the pointer.
+ */
 @media (min-width: 600px) {
   .dialog {
     width: min(34rem, calc(100% - 3rem));
     height: fit-content;
-    max-height: calc(100dvh - 4rem);
-    margin: auto;
+    max-height: calc(100dvh - 5.5rem);
+    margin: 4rem auto auto;
     border-radius: 0.75rem;
   }
 
   .layout {
     height: auto;
-    max-height: calc(100dvh - 4rem);
+    max-height: calc(100dvh - 5.5rem);
   }
 }

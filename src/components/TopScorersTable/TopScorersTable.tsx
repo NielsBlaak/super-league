@@ -23,7 +23,7 @@ const columns = helper.columns([
       <span className={styles.scorer}>
         <span className={styles.player}>{row.original.player.name}</span>
         <span className={styles.club}>
-          <TeamBadge team={row.original.team} />
+          <TeamBadge team={row.original.team} size="xs" />
           {row.original.team.name}
         </span>
       </span>

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent } from "react";
 import Button from "@/components/Button";
 import Dialog, { DialogBody, DialogFooter, DialogForm } from "@/components/Dialog";
+import TeamBadge from "@/components/TeamBadge";
 import { TokenForm } from "@/components/TokenDialog";
 import { errorMessage, useResults } from "@/contexts/ResultsContext";
 import { roundCount } from "@/data/schedule";
@@ -116,10 +117,17 @@ function ResultForm({ match, onClose, onSaved }: ResultFormProps) {
         <p className={styles.round}>
           Speelronde {match.round} van {roundCount}
         </p>
-        <div className={styles.teams}>
-          <TeamEntry team={home} slots={homeSlots} onChange={setHomeSlots} />
-          <TeamEntry team={away} slots={awaySlots} onChange={setAwaySlots} />
+        {/* The score controls stay at one place. A new goal only adds a list below them. */}
+        <div className={styles.scoreboard}>
+          <TeamScore team={home} count={homeSlots.length} onChange={(count) => setHomeSlots((slots) => resize(slots, count))} />
+          <TeamScore team={away} count={awaySlots.length} onChange={(count) => setAwaySlots((slots) => resize(slots, count))} />
         </div>
+        {(homeSlots.length > 0 || awaySlots.length > 0) && (
+          <div className={styles.scorerGroups}>
+            <ScorerList team={home} slots={homeSlots} onChange={setHomeSlots} />
+            <ScorerList team={away} slots={awaySlots} onChange={setAwaySlots} />
+          </div>
+        )}
         {!complete && <p className={styles.hint}>Kies de maker van elk doelpunt. Daarna kun je de uitslag opslaan.</p>}
         {error && (
           <p className={styles.error} role="alert">
@@ -141,75 +149,98 @@ function ResultForm({ match, onClose, onSaved }: ResultFormProps) {
   );
 }
 
-type TeamEntryProps = {
+/** A new goal gets an empty scorer. A removed goal drops the last scorer. */
+function resize(slots: string[], count: number): string[] {
+  return count <= slots.length ? slots.slice(0, count) : [...slots, ...Array(count - slots.length).fill("")];
+}
+
+type TeamScoreProps = {
+  team: Team;
+  count: number;
+  onChange: (count: number) => void;
+};
+
+/** A band in the club colours with the buttons for the number of goals. */
+function TeamScore({ team, count, onChange }: TeamScoreProps) {
+  return (
+    <div className={styles.band} style={teamStyle(team)} role="group" aria-label={team.name}>
+      <span className={styles.identity}>
+        <TeamBadge team={team} size="md" plate />
+        <span className={styles.teamName}>{team.name}</span>
+      </span>
+      <div className={styles.stepper}>
+        <button
+          type="button"
+          className={styles.step}
+          onClick={() => onChange(count - 1)}
+          disabled={count === 0}
+          aria-label={`Doelpunt minder voor ${team.name}`}
+        >
+          −
+        </button>
+        <output className={styles.score} aria-label={`Doelpunten van ${team.name}`}>
+          {count}
+        </output>
+        <button
+          type="button"
+          className={styles.step}
+          onClick={() => onChange(count + 1)}
+          disabled={count >= MAX_GOALS}
+          aria-label={`Doelpunt erbij voor ${team.name}`}
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+}
+
+type ScorerListProps = {
   team: Team;
   slots: string[];
   onChange: (slots: string[]) => void;
 };
 
-function TeamEntry({ team, slots, onChange }: TeamEntryProps) {
+/** One list for each goal. It has nothing to show for a team without goals. */
+function ScorerList({ team, slots, onChange }: ScorerListProps) {
+  const headingId = useId();
   const lines = groupByLine(squads[team.id]);
+  if (slots.length === 0) return null;
 
   return (
-    <fieldset className={styles.team} style={teamStyle(team)}>
-      <legend className="visuallyHidden">{team.name}</legend>
-      <div className={styles.band}>
-        <span className={styles.teamName}>{team.name}</span>
-        <div className={styles.stepper}>
-          <button
-            type="button"
-            className={styles.step}
-            onClick={() => onChange(slots.slice(0, -1))}
-            disabled={slots.length === 0}
-            aria-label={`Doelpunt minder voor ${team.name}`}
-          >
-            −
-          </button>
-          <output className={styles.score} aria-label={`Doelpunten van ${team.name}`}>
-            {slots.length}
-          </output>
-          <button
-            type="button"
-            className={styles.step}
-            onClick={() => onChange([...slots, ""])}
-            disabled={slots.length >= MAX_GOALS}
-            aria-label={`Doelpunt erbij voor ${team.name}`}
-          >
-            +
-          </button>
-        </div>
-      </div>
-
-      {slots.length > 0 && (
-        <ol className={styles.scorers}>
-          {slots.map((slot, index) => (
-            <li key={index}>
-              <select
-                className={styles.select}
-                value={slot}
-                onChange={(event) =>
-                  onChange(slots.map((current, i) => (i === index ? event.target.value : current)))
-                }
-                aria-label={`Maker van doelpunt ${index + 1} van ${team.name}`}
-                required
-              >
-                <option value="">Kies de maker van doelpunt {index + 1}</option>
-                {lines.map((line) => (
-                  <optgroup key={line.label} label={line.label}>
-                    {line.players.map((player) => (
-                      <option key={player.id} value={player.id}>
-                        {player.number} {player.name}
-                      </option>
-                    ))}
-                  </optgroup>
-                ))}
-                <option value={OWN_GOAL}>Eigen doelpunt van de tegenstander</option>
-              </select>
-            </li>
-          ))}
-        </ol>
-      )}
-    </fieldset>
+    <div className={styles.group} role="group" aria-labelledby={headingId}>
+      <h3 id={headingId} className={styles.groupTitle}>
+        <TeamBadge team={team} size="xs" />
+        Doelpunten {team.name}
+      </h3>
+      <ol className={styles.scorers}>
+        {slots.map((slot, index) => (
+          <li key={index}>
+            <select
+              className={styles.select}
+              value={slot}
+              onChange={(event) =>
+                onChange(slots.map((current, i) => (i === index ? event.target.value : current)))
+              }
+              aria-label={`Maker van doelpunt ${index + 1} van ${team.name}`}
+              required
+            >
+              <option value="">Kies de maker van doelpunt {index + 1}</option>
+              {lines.map((line) => (
+                <optgroup key={line.label} label={line.label}>
+                  {line.players.map((player) => (
+                    <option key={player.id} value={player.id}>
+                      {player.number} {player.name}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+              <option value={OWN_GOAL}>Eigen doelpunt van de tegenstander</option>
+            </select>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
 

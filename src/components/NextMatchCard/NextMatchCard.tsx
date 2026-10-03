@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ResultDialog from "@/components/ResultDialog";
+import TeamBadge from "@/components/TeamBadge";
 import { useResults } from "@/contexts/ResultsContext";
 import { roundCount, schedule } from "@/data/schedule";
 import { teams, teamsById } from "@/data/teams";
@@ -17,6 +18,7 @@ function Scarf({ clubs }: { clubs: Team[] }) {
     <span className={styles.scarf} data-clubs={clubs.length}>
       {clubs.map((club) => (
         <span key={club.id} className={styles.half} style={teamStyle(club)}>
+          <TeamBadge team={club} size="lg" plate />
           <span className={styles.name}>{club.name}</span>
         </span>
       ))}

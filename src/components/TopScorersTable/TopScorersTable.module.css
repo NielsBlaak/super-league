@@ -15,8 +15,3 @@
   color: var(--ink-soft);
   font-size: 0.875rem;
 }
-
-.club > span {
-  width: 0.625rem;
-  height: 0.875rem;
-}

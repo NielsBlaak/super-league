@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo } from "next/font/google";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import LocalModeNotice from "@/components/LocalModeNotice";
 import { ResultsProvider } from "@/contexts/ResultsContext";
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {children}
             <LocalModeNotice />
           </main>
+          <Footer />
         </ResultsProvider>
       </body>
     </html>

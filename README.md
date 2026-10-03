@@ -68,10 +68,23 @@ Zonder token is de site alleen-lezen.
 |---|---|
 | `src/data/teams.ts` | De clubs en de clubkleuren. |
 | `src/data/squads.ts` | De selecties (bron: sofifa.com, FC27, update 1 oktober 2026). |
+| `src/data/logos.ts` | Koppelt elke club aan een logo in `src/assets/logos/`. |
+| `src/assets/logos/` | De clublogo’s als SVG. De bestandsnaam is de club-ID. |
 | `src/lib/schedule.ts` | Het speelschema. |
 | `src/lib/standings.ts` | De standbepaling. |
 
 Let op: de volgorde van de clubs in `teams.ts` bepaalt het speelschema en de wedstrijd-ID's. Wijzig deze volgorde niet na de eerste uitslag.
+
+## Clublogo’s
+
+De logo’s komen van [football-logos.cc](https://football-logos.cc/). De bestanden staan in de repo. De site laadt ze dus niet van die server.
+
+De logo’s zijn eigendom van de clubs. Football-logos.cc staat gebruik toe voor informatieve, redactionele en fanprojecten. Gebruik voor winst is niet toegestaan, en de site mag geen verbinding met de clubs suggereren. Houd deze competitie daarom non-commercieel.
+
+Een logo vervangen:
+
+1. Download de SVG van de logopagina op football-logos.cc.
+2. Zet het bestand in `src/assets/logos/` met de club-ID als naam, bijvoorbeeld `ars.svg`.
 
 ## Standbepaling
 
