@@ -149,6 +149,29 @@
         }
       ],
       "homeCoach": "T"
+    },
+    "mun-rma": {
+      "home": 2,
+      "away": 2,
+      "goals": [
+        {
+          "team": "mun",
+          "playerId": 231677
+        },
+        {
+          "team": "mun",
+          "playerId": 240243
+        },
+        {
+          "team": "rma",
+          "playerId": 231747
+        },
+        {
+          "team": "rma",
+          "playerId": 231747
+        }
+      ],
+      "homeCoach": "T"
     }
   }
 }
