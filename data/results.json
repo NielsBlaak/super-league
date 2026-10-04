@@ -15,6 +15,21 @@
         }
       ],
       "homeCoach": "T"
+    },
+    "psg-mun": {
+      "home": 1,
+      "away": 1,
+      "goals": [
+        {
+          "team": "psg",
+          "playerId": 241461
+        },
+        {
+          "team": "mun",
+          "playerId": 231677
+        }
+      ],
+      "homeCoach": "T"
     }
   }
 }
