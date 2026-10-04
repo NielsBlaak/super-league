@@ -118,6 +118,37 @@
         }
       ],
       "homeCoach": "T"
+    },
+    "bar-ars": {
+      "home": 5,
+      "away": 1,
+      "goals": [
+        {
+          "team": "bar",
+          "playerId": 233419
+        },
+        {
+          "team": "bar",
+          "playerId": 233419
+        },
+        {
+          "team": "bar",
+          "playerId": 233419
+        },
+        {
+          "team": "bar",
+          "playerId": 233419
+        },
+        {
+          "team": "bar",
+          "playerId": 277643
+        },
+        {
+          "team": "ars",
+          "playerId": 246669
+        }
+      ],
+      "homeCoach": "T"
     }
   }
 }
