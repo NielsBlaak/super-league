@@ -49,6 +49,29 @@
         }
       ],
       "homeCoach": "T"
+    },
+    "rma-liv": {
+      "home": 1,
+      "away": 3,
+      "goals": [
+        {
+          "team": "rma",
+          "playerId": 231747
+        },
+        {
+          "team": "liv",
+          "playerId": 233731
+        },
+        {
+          "team": "liv",
+          "playerId": 233731
+        },
+        {
+          "team": "liv",
+          "playerId": 233731
+        }
+      ],
+      "homeCoach": "N"
     }
   }
 }
