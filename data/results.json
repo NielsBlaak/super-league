@@ -172,6 +172,29 @@
         }
       ],
       "homeCoach": "T"
+    },
+    "mci-atm": {
+      "home": 1,
+      "away": 3,
+      "goals": [
+        {
+          "team": "mci",
+          "playerId": 239085
+        },
+        {
+          "team": "atm",
+          "playerId": 246191
+        },
+        {
+          "team": "atm",
+          "playerId": 246191
+        },
+        {
+          "team": "atm",
+          "playerId": 253396
+        }
+      ],
+      "homeCoach": "N"
     }
   }
 }
