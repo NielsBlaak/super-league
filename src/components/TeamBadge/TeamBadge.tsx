@@ -8,11 +8,12 @@ type TeamBadgeProps = {
   size?: "xs" | "sm" | "md" | "lg";
   /** A white disc behind the logo. Use it on a club colour, where a dark logo can disappear. */
   plate?: boolean;
+  className?: string;
 };
 
 /** The club logo. It is decoration: the club name is always next to it. */
-export default function TeamBadge({ team, size = "sm", plate = false }: TeamBadgeProps) {
-  const classes = [styles.badge, styles[size], plate && styles.plate].filter(Boolean).join(" ");
+export default function TeamBadge({ team, size = "sm", plate = false, className }: TeamBadgeProps) {
+  const classes = [styles.badge, styles[size], plate && styles.plate, className].filter(Boolean).join(" ");
 
   return (
     <span className={classes} aria-hidden="true">

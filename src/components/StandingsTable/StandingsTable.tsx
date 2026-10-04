@@ -2,12 +2,14 @@
 
 import { columnVisibilityFeature, createColumnHelper, tableFeatures, useTable } from "@tanstack/react-table";
 import { useMemo } from "react";
+import SegmentedControl from "@/components/SegmentedControl";
 import TeamBadge from "@/components/TeamBadge";
 import { useResults } from "@/contexts/ResultsContext";
 import { schedule } from "@/data/schedule";
 import { teams } from "@/data/teams";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { computeStandings, type StandingRow } from "@/lib/standings";
+import { computeStandings, type Side, type StandingRow } from "@/lib/standings";
 import styles from "../table.module.css";
 
 type StatKey = "played" | "won" | "drawn" | "lost" | "goalsFor" | "goalsAgainst" | "goalDifference" | "points";
@@ -38,10 +40,14 @@ const columns = helper.columns([
   helper.accessor((row) => row.team.name, {
     id: "team",
     header: "Club",
+    // CSS shows the full name or the short name. The view with all columns on a phone uses the short name.
     cell: ({ row }) => (
       <span className={styles.team}>
-        <TeamBadge team={row.original.team} />
-        {row.original.team.name}
+        <TeamBadge team={row.original.team} className={styles.teamLogo} />
+        <span className={styles.teamFull}>{row.original.team.name}</span>
+        <abbr className={styles.teamShort} title={row.original.team.name}>
+          {row.original.team.shortName}
+        </abbr>
       </span>
     ),
   }),
@@ -58,9 +64,16 @@ const columns = helper.columns([
   helper.accessor("points", { header: statHeader("points") }),
 ]);
 
-// A phone shows the short table. Larger screens show all columns.
-const PHONE_COLUMNS = { won: false, drawn: false, lost: false, goalsFor: false, goalsAgainst: false };
+// The short view on a phone. The view "Alles" and larger screens show all columns.
+const SHORT_COLUMNS = { won: false, drawn: false, lost: false, goalsFor: false, goalsAgainst: false };
 const ALL_COLUMNS = {};
+
+type View = "short" | "all";
+
+const VIEW_OPTIONS: { value: View; label: string }[] = [
+  { value: "short", label: "Kort" },
+  { value: "all", label: "Alles" },
+];
 
 const columnClass = (id: string) => {
   if (id === "rank") return styles.rank;
@@ -69,16 +82,25 @@ const columnClass = (id: string) => {
   return styles.num;
 };
 
-export default function StandingsTable() {
+type StandingsTableProps = {
+  /** Counts only the home matches or only the away matches. */
+  side?: Side;
+};
+
+export default function StandingsTable({ side }: StandingsTableProps) {
   const { results } = useResults();
   const isWide = useMediaQuery("(min-width: 600px)");
-  const data = useMemo(() => computeStandings(teams, schedule, results), [results]);
+  const [view, setView] = useLocalStorage<View>("super-league:standings-view", "short");
+  const data = useMemo(() => computeStandings(teams, schedule, results, side), [results, side]);
+
+  // The phone view with all columns uses narrow cells and the short club name.
+  const phoneView = isWide ? undefined : view;
 
   const table = useTable({
     features,
     columns,
     data,
-    state: { columnVisibility: isWide ? ALL_COLUMNS : PHONE_COLUMNS },
+    state: { columnVisibility: phoneView === "short" ? SHORT_COLUMNS : ALL_COLUMNS },
   });
 
   const legend = table
@@ -89,7 +111,15 @@ export default function StandingsTable() {
 
   return (
     <>
-      <table className={styles.table}>
+      <SegmentedControl
+        className={styles.viewSwitch}
+        label="Kolommen in de stand"
+        hideLabel
+        options={VIEW_OPTIONS}
+        value={view}
+        onChange={setView}
+      />
+      <table className={styles.table} data-view={phoneView}>
         <thead>
           {table.getHeaderGroups().map((group) => (
             <tr key={group.id}>

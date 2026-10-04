@@ -54,6 +54,67 @@
   font-weight: 600;
 }
 
+/* The short club name is only for the phone view with all columns. */
+.teamShort {
+  display: none;
+}
+
+/*
+ * The phone view "Alles": all columns fit on the screen without a sideways scroll.
+ * The cells are narrow, the logo is small and the club name is short.
+ */
+.table[data-view="all"] th,
+.table[data-view="all"] td {
+  padding-inline: 0.125rem;
+  font-size: 0.875rem;
+}
+
+.table[data-view="all"] thead th {
+  font-size: 0.75rem;
+}
+
+.table[data-view="all"] .rank {
+  width: 1.25rem;
+  padding-left: 0;
+}
+
+.table[data-view="all"] .num {
+  min-width: 1.625rem;
+}
+
+.table[data-view="all"] .strong {
+  padding-right: 0;
+}
+
+.table[data-view="all"] .team {
+  gap: 0.375rem;
+}
+
+.table[data-view="all"] .teamLogo {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.table[data-view="all"] .teamFull {
+  display: none;
+}
+
+.table[data-view="all"] .teamShort {
+  display: inline;
+}
+
+/* The switch between the short view and all columns. Larger screens always show all columns. */
+.viewSwitch {
+  align-self: flex-start;
+  min-width: 11rem;
+}
+
+@media (min-width: 600px) {
+  .viewSwitch {
+    display: none;
+  }
+}
+
 .legend {
   margin-top: 0.75rem;
   color: var(--ink-soft);

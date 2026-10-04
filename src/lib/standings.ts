@@ -18,7 +18,10 @@ type Tally = Omit<StandingRow, "rank">;
 const POINTS_WIN = 3;
 const POINTS_DRAW = 1;
 
-function tally(teams: Team[], matches: Match[], results: Results): Map<string, Tally> {
+/** "home" counts only home matches of a team, "away" only away matches. */
+export type Side = "home" | "away";
+
+function tally(teams: Team[], matches: Match[], results: Results, side?: Side): Map<string, Tally> {
   const table = new Map<string, Tally>(
     teams.map((team) => [
       team.id,
@@ -57,8 +60,8 @@ function tally(teams: Team[], matches: Match[], results: Results): Map<string, T
     const home = table.get(match.home);
     const away = table.get(match.away);
     if (!result || !home || !away) continue;
-    record(home, result.home, result.away);
-    record(away, result.away, result.home);
+    if (side !== "away") record(home, result.home, result.away);
+    if (side !== "home") record(away, result.away, result.home);
   }
 
   return table;
@@ -95,9 +98,15 @@ function breakTie(group: Tally[], schedule: Match[], results: Results): Tally[] 
 /**
  * Eredivisie order: points, goal difference, goals scored,
  * head-to-head result, club name.
+ * With `side`, the table counts only the home matches or only the away matches.
  */
-export function computeStandings(teams: Team[], schedule: Match[], results: Results): StandingRow[] {
-  const rows = [...tally(teams, schedule, results).values()].sort(compareOverall);
+export function computeStandings(
+  teams: Team[],
+  schedule: Match[],
+  results: Results,
+  side?: Side,
+): StandingRow[] {
+  const rows = [...tally(teams, schedule, results, side).values()].sort(compareOverall);
   const ordered: Tally[] = [];
 
   for (let start = 0; start < rows.length; ) {
