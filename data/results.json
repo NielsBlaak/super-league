@@ -87,6 +87,37 @@
         }
       ],
       "homeCoach": "T"
+    },
+    "psg-int": {
+      "home": 4,
+      "away": 2,
+      "goals": [
+        {
+          "team": "psg",
+          "playerId": 241461
+        },
+        {
+          "team": "psg",
+          "playerId": 247635
+        },
+        {
+          "team": "psg",
+          "playerId": 231443
+        },
+        {
+          "team": "psg",
+          "playerId": 271421
+        },
+        {
+          "team": "int",
+          "playerId": 231478
+        },
+        {
+          "team": "int",
+          "playerId": 277327
+        }
+      ],
+      "homeCoach": "T"
     }
   }
 }
