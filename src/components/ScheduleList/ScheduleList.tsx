@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import CoachChip from "@/components/CoachChip";
 import ResultDialog from "@/components/ResultDialog";
 import TeamBadge from "@/components/TeamBadge";
 import { useResults } from "@/contexts/ResultsContext";
 import { roundCount, schedule } from "@/data/schedule";
 import { teamsById } from "@/data/teams";
+import { otherCoach } from "@/lib/coaches";
 import { getNextMatch } from "@/lib/schedule";
 import type { Match } from "@/lib/types";
 import styles from "./ScheduleList.module.css";
@@ -51,10 +53,19 @@ export default function ScheduleList() {
                         <TeamBadge team={home} />
                       </span>
                       <span className={styles.score}>
-                        {result ? `${result.home}–${result.away}` : "–"}
+                        <span className={styles.scoreLine}>
+                          {result ? `${result.home}–${result.away}` : "–"}
+                        </span>
                         {!result && (
                           <span className="visuallyHidden">
                             {isNext ? " eerstvolgende wedstrijd " : " nog geen uitslag "}
+                          </span>
+                        )}
+                        {/* Who played: the letter of each person is below the goals of that team. */}
+                        {result?.homeCoach && (
+                          <span className={styles.coaches}>
+                            <CoachChip coach={result.homeCoach} size="sm" />
+                            <CoachChip coach={otherCoach(result.homeCoach)} size="sm" />
                           </span>
                         )}
                       </span>

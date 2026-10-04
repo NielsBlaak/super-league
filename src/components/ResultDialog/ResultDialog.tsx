@@ -2,17 +2,23 @@
 
 import { useId, useState, type FormEvent } from "react";
 import Button from "@/components/Button";
+import CoachChip from "@/components/CoachChip";
 import Dialog, { DialogBody, DialogFooter, DialogForm } from "@/components/Dialog";
+import SegmentedControl from "@/components/SegmentedControl";
 import TeamBadge from "@/components/TeamBadge";
 import { TokenForm } from "@/components/TokenDialog";
 import { errorMessage, useResults } from "@/contexts/ResultsContext";
+import { coachNames } from "@/data/coaches";
 import { roundCount } from "@/data/schedule";
 import { squads } from "@/data/squads";
 import { teamsById } from "@/data/teams";
+import { COACH_IDS, coachOf, otherCoach } from "@/lib/coaches";
 import { groupByLine } from "@/lib/positions";
 import { teamStyle } from "@/lib/teamStyle";
-import type { Goal, Match, Result, Team } from "@/lib/types";
+import type { CoachId, Goal, Match, Result, Team } from "@/lib/types";
 import styles from "./ResultDialog.module.css";
+
+const COACH_OPTIONS = COACH_IDS.map((coach) => ({ value: coach, label: coachNames[coach] }));
 
 const OWN_GOAL = "own";
 const MAX_GOALS = 20;
@@ -69,11 +75,18 @@ function ResultForm({ match, onClose, onSaved }: ResultFormProps) {
 
   const [homeSlots, setHomeSlots] = useState(() => initialSlots(existing, home.id, existing?.home ?? 0));
   const [awaySlots, setAwaySlots] = useState(() => initialSlots(existing, away.id, existing?.away ?? 0));
+  const [homeCoach, setHomeCoach] = useState<CoachId | null>(existing?.homeCoach ?? null);
   const [busy, setBusy] = useState<"save" | "delete" | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const complete = [...homeSlots, ...awaySlots].every((slot) => slot !== "");
+  const scorersComplete = [...homeSlots, ...awaySlots].every((slot) => slot !== "");
+  const complete = scorersComplete && homeCoach !== null;
+  // The hint tells the user what is necessary before the result can be saved.
+  const missing = [
+    homeCoach === null && `Kies wie met ${home.name} speelt.`,
+    !scorersComplete && "Kies de maker van elk doelpunt.",
+  ].filter(Boolean);
 
   const run = async (kind: "save" | "delete", action: () => Promise<void>, message: string) => {
     setBusy(kind);
@@ -90,11 +103,12 @@ function ResultForm({ match, onClose, onSaved }: ResultFormProps) {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    if (!complete) return;
+    if (!scorersComplete || homeCoach === null) return;
     const result: Result = {
       home: homeSlots.length,
       away: awaySlots.length,
       goals: [...toGoals(home.id, homeSlots), ...toGoals(away.id, awaySlots)],
+      homeCoach,
     };
     run(
       "save",
@@ -117,10 +131,28 @@ function ResultForm({ match, onClose, onSaved }: ResultFormProps) {
         <p className={styles.round}>
           Speelronde {match.round} van {roundCount}
         </p>
+        {/* The dice decide who plays at home. The other person plays with the away team. */}
+        <SegmentedControl
+          className={styles.coach}
+          label={`Wie speelt met ${home.name} (thuis)?`}
+          options={COACH_OPTIONS}
+          value={homeCoach}
+          onChange={setHomeCoach}
+        />
         {/* The score controls stay at one place. A new goal only adds a list below them. */}
         <div className={styles.scoreboard}>
-          <TeamScore team={home} count={homeSlots.length} onChange={(count) => setHomeSlots((slots) => resize(slots, count))} />
-          <TeamScore team={away} count={awaySlots.length} onChange={(count) => setAwaySlots((slots) => resize(slots, count))} />
+          <TeamScore
+            team={home}
+            coach={homeCoach}
+            count={homeSlots.length}
+            onChange={(count) => setHomeSlots((slots) => resize(slots, count))}
+          />
+          <TeamScore
+            team={away}
+            coach={homeCoach && otherCoach(homeCoach)}
+            count={awaySlots.length}
+            onChange={(count) => setAwaySlots((slots) => resize(slots, count))}
+          />
         </div>
         {(homeSlots.length > 0 || awaySlots.length > 0) && (
           <div className={styles.scorerGroups}>
@@ -128,7 +160,7 @@ function ResultForm({ match, onClose, onSaved }: ResultFormProps) {
             <ScorerList team={away} slots={awaySlots} onChange={setAwaySlots} />
           </div>
         )}
-        {!complete && <p className={styles.hint}>Kies de maker van elk doelpunt. Daarna kun je de uitslag opslaan.</p>}
+        {missing.length > 0 && <p className={styles.hint}>{missing.join(" ")} Daarna kun je de uitslag opslaan.</p>}
         {error && (
           <p className={styles.error} role="alert">
             {error}
@@ -156,16 +188,26 @@ function resize(slots: string[], count: number): string[] {
 
 type TeamScoreProps = {
   team: Team;
+  /** Who plays with this team. `null` before the choice. */
+  coach: CoachId | null;
   count: number;
   onChange: (count: number) => void;
 };
 
 /** A band in the club colours with the buttons for the number of goals. */
-function TeamScore({ team, count, onChange }: TeamScoreProps) {
+function TeamScore({ team, coach, count, onChange }: TeamScoreProps) {
   return (
     <div className={styles.band} style={teamStyle(team)} role="group" aria-label={team.name}>
       <span className={styles.identity}>
-        <TeamBadge team={team} size="md" plate />
+        {/* The letter is on the corner of the logo, so it does not change the width of the band. */}
+        <span className={styles.logo}>
+          <TeamBadge team={team} size="md" plate />
+          {coach && (
+            <span className={styles.logoChip}>
+              <CoachChip coach={coach} />
+            </span>
+          )}
+        </span>
         <span className={styles.teamName}>{team.name}</span>
       </span>
       <div className={styles.stepper}>
@@ -257,6 +299,12 @@ function scorerSummary(result: Result, team: Team): string {
   return [...counts].map(([name, count]) => (count > 1 ? `${name} ${count}×` : name)).join(", ");
 }
 
+// "Inter Milan (Niels)", or only the club name when the result has no coach.
+function withCoach(team: Team, result: Result | undefined, side: "home" | "away"): string {
+  const coach = result && coachOf(result, side);
+  return coach ? `${team.name} (${coachNames[coach]})` : team.name;
+}
+
 /** Without a token the site is read-only. The dialog shows the result and the token form. */
 function ReadOnlyResult({ match }: { match: Match }) {
   const { results } = useResults();
@@ -270,7 +318,8 @@ function ReadOnlyResult({ match }: { match: Match }) {
         Speelronde {match.round} van {roundCount}
       </p>
       <p className={styles.fixture}>
-        {home.name} {result ? `${result.home}–${result.away}` : "–"} {away.name}
+        {withCoach(home, result, "home")} {result ? `${result.home}–${result.away}` : "–"}{" "}
+        {withCoach(away, result, "away")}
       </p>
       {result ? (
         <dl className={styles.summary}>

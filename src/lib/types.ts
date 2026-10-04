@@ -41,10 +41,15 @@ export type Goal = {
   ownGoal?: true;
 };
 
+/** The two people who play the league: Niels (N) and Tim (T). */
+export type CoachId = "N" | "T";
+
 export type Result = {
   home: number;
   away: number;
   goals: Goal[];
+  /** Who played with the home team. The other person played with the away team. Old results do not have it. */
+  homeCoach?: CoachId;
 };
 
 export type Results = Record<string, Result>;

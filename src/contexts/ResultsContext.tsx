@@ -11,7 +11,9 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
+import { coachNames } from "@/data/coaches";
 import { teamsById } from "@/data/teams";
+import { otherCoach } from "@/lib/coaches";
 import { ConflictError, githubConfig, resultsStore, StoreError, verifyToken, type Snapshot } from "@/lib/store";
 import { clearToken, getToken, setToken, subscribeToken } from "@/lib/store/token";
 import type { Match, Result, Results } from "@/lib/types";
@@ -97,9 +99,13 @@ export function ResultsProvider({ children }: { children: ReactNode }) {
     (match: Match, result: Result) => {
       const home = teamsById[match.home].name;
       const away = teamsById[match.away].name;
+      // The commit message also names who played, for example "(Niels - Tim)".
+      const coaches = result.homeCoach
+        ? ` (${coachNames[result.homeCoach]} - ${coachNames[otherCoach(result.homeCoach)]})`
+        : "";
       return mutate(
         (results) => ({ ...results, [match.id]: result }),
-        `Uitslag: ${home} ${result.home}-${result.away} ${away}`,
+        `Uitslag: ${home} ${result.home}-${result.away} ${away}${coaches}`,
       );
     },
     [mutate],

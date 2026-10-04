@@ -8,6 +8,19 @@
   --line: #d2d9d1;
   --danger: #a3231b;
 
+  /*
+   * Chart colours. Checked on --ground for colour blindness and contrast.
+   * Niels and Tim keep the same colour on each page.
+   */
+  --coach-n: #2a78d6;
+  --coach-t: #d95926;
+  --chart-neutral: #9aa79d;
+  --chart-1: #4f8f6f;
+  /* One hue from dark to light, for ordered groups such as home win, draw, away win. */
+  --chart-ramp-1: #12261d;
+  --chart-ramp-2: #4f8f6f;
+  --chart-ramp-3: #8ea695;
+
   --gutter: 1rem;
   --tabbar: 3.5rem;
 

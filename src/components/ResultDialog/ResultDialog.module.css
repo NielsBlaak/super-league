@@ -37,11 +37,29 @@
   color: var(--team-text);
 }
 
+/* The question who plays at home. It has a fixed height, so the score buttons do not move. */
+.coach {
+  margin-top: 0.75rem;
+}
+
 .identity {
   display: flex;
   align-items: center;
   gap: 0.625rem;
   min-width: 0;
+}
+
+.logo {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+.logoChip {
+  position: absolute;
+  right: -0.375rem;
+  bottom: -0.3125rem;
+  display: inline-flex;
 }
 
 .teamName {

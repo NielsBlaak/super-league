@@ -1,3 +1,4 @@
+import { isCoachId } from "@/lib/coaches";
 import type { Result, Results, ResultsFile } from "@/lib/types";
 
 /** `version` identifies the stored file. The GitHub store uses the blob SHA. */
@@ -46,7 +47,19 @@ export function parseResultsFile(text: string): Results {
   if (!isRecord(data) || !isRecord(data.results)) {
     throw new StoreError("Het bestand met uitslagen is beschadigd.");
   }
-  return Object.fromEntries(Object.entries(data.results).filter(([, result]) => isResult(result))) as Results;
+  return Object.fromEntries(
+    Object.entries(data.results)
+      .filter((entry): entry is [string, Result] => isResult(entry[1]))
+      .map(([id, result]) => [id, withValidCoach(result)]),
+  );
+}
+
+// A value that is not N or T is the same as no value.
+function withValidCoach(result: Result): Result {
+  if (result.homeCoach === undefined || isCoachId(result.homeCoach)) return result;
+  const rest = { ...result };
+  delete rest.homeCoach;
+  return rest;
 }
 
 export function serializeResults(results: Results): string {
