@@ -30,6 +30,25 @@
         }
       ],
       "homeCoach": "T"
+    },
+    "atm-bar": {
+      "home": 1,
+      "away": 2,
+      "goals": [
+        {
+          "team": "atm",
+          "ownGoal": true
+        },
+        {
+          "team": "bar",
+          "playerId": 277643
+        },
+        {
+          "team": "bar",
+          "playerId": 277643
+        }
+      ],
+      "homeCoach": "T"
     }
   }
 }
