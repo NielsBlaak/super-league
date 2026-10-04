@@ -8,6 +8,14 @@ const LINES: { label: string; positions: Position[] }[] = [
   { label: "Keeper", positions: ["GK"] },
 ];
 
+/** The names of the lines, attack first. */
+export const LINE_LABELS = LINES.map((line) => line.label);
+
+/** Gives the name of the line of a position. */
+export function lineOf(position: Position): string {
+  return LINES.find((line) => line.positions.includes(position))!.label;
+}
+
 /** Groups a squad by line, attack first. Players in a line are in shirt number order. */
 export function groupByLine(players: Player[]): { label: string; players: Player[] }[] {
   return LINES.map(({ label, positions }) => ({

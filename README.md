@@ -1,13 +1,22 @@
 # Super League
 
-Een website voor een eigen voetbalcompetitie met 10 clubs. Elk team speelt een keer tegen elk ander team: 9 speelrondes en 45 wedstrijden.
+Een website voor een FIFA-competitie van Niels en Tim met 10 clubs. Elk team speelt een keer tegen elk ander team: 9 speelrondes en 45 wedstrijden.
 
 De site toont:
 
 - de eerstvolgende wedstrijd, met de invoer van de uitslag en de doelpuntenmakers;
 - de stand, met de regels van de Eredivisie;
 - het volledige speelschema;
-- de topscorers.
+- de topscorers;
+- de statistieken, waaronder de onderlinge stand van Niels en Tim.
+
+## Wie speelt met welk team
+
+Een dobbelsteen bepaalt per wedstrijd wie thuis speelt. Bij de uitslag kies je wie met het thuisteam speelde: Niels (N) of Tim (T). De andere persoon speelde met het uitteam. De keuze is verplicht.
+
+Het speelschema toont de letters onder de score. De statistieken gebruiken de keuze voor de onderlinge stand.
+
+Een uitslag van voor deze functie heeft geen speler. Die wedstrijd telt niet mee bij Niels tegen Tim. Open de wedstrijd in het speelschema en vul de keuze aan.
 
 ## Techniek
 
@@ -33,7 +42,7 @@ Andere opdrachten:
 
 | Opdracht | Doel |
 |---|---|
-| `npm run test` | Test de logica van het speelschema, de stand en de topscorers. |
+| `npm run test` | Test de logica van het speelschema, de stand, de topscorers en de statistieken. |
 | `npm run lint` | Controleer de code met ESLint. |
 | `npm run build` | Maak de statische site in de map `out/`. |
 
@@ -67,11 +76,13 @@ Zonder token is de site alleen-lezen.
 | Bestand | Inhoud |
 |---|---|
 | `src/data/teams.ts` | De clubs en de clubkleuren. |
+| `src/data/coaches.ts` | De namen bij de letters N en T. |
 | `src/data/squads.ts` | De selecties (bron: sofifa.com, FC27, update 1 oktober 2026). |
 | `src/data/logos.ts` | Koppelt elke club aan een logo in `src/assets/logos/`. |
 | `src/assets/logos/` | De clublogo’s als SVG. De bestandsnaam is de club-ID. |
 | `src/lib/schedule.ts` | Het speelschema. |
 | `src/lib/standings.ts` | De standbepaling. |
+| `src/lib/stats.ts` | De berekening van de statistieken. |
 
 Let op: de volgorde van de clubs in `teams.ts` bepaalt het speelschema en de wedstrijd-ID's. Wijzig deze volgorde niet na de eerste uitslag.
 

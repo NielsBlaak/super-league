@@ -11,6 +11,7 @@ const LINKS = [
   { href: "/", label: "Stand" },
   { href: "/speelschema", label: "Speelschema" },
   { href: "/topscorers", label: "Topscorers" },
+  { href: "/statistieken", label: "Statistieken" },
 ];
 
 export default function Header() {
