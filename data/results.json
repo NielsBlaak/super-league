@@ -233,6 +233,17 @@
         }
       ],
       "homeCoach": "T"
+    },
+    "rma-psg": {
+      "home": 0,
+      "away": 1,
+      "goals": [
+        {
+          "team": "psg",
+          "playerId": 272834
+        }
+      ],
+      "homeCoach": "N"
     }
   }
 }
