@@ -214,6 +214,25 @@
         }
       ],
       "homeCoach": "N"
+    },
+    "int-bar": {
+      "home": 2,
+      "away": 1,
+      "goals": [
+        {
+          "team": "int",
+          "playerId": 231478
+        },
+        {
+          "team": "int",
+          "playerId": 231478
+        },
+        {
+          "team": "bar",
+          "playerId": 233419
+        }
+      ],
+      "homeCoach": "T"
     }
   }
 }
