@@ -244,6 +244,37 @@
         }
       ],
       "homeCoach": "N"
+    },
+    "ars-mci": {
+      "home": 2,
+      "away": 4,
+      "goals": [
+        {
+          "team": "ars",
+          "playerId": 256948
+        },
+        {
+          "team": "ars",
+          "playerId": 256948
+        },
+        {
+          "team": "mci",
+          "playerId": 239085
+        },
+        {
+          "team": "mci",
+          "playerId": 241236
+        },
+        {
+          "team": "mci",
+          "playerId": 241236
+        },
+        {
+          "team": "mci",
+          "playerId": 277427
+        }
+      ],
+      "homeCoach": "T"
     }
   }
 }
