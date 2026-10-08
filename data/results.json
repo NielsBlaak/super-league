@@ -298,6 +298,33 @@
         }
       ],
       "homeCoach": "T"
+    },
+    "atm-liv": {
+      "home": 2,
+      "away": 3,
+      "goals": [
+        {
+          "team": "atm",
+          "playerId": 257279
+        },
+        {
+          "team": "atm",
+          "playerId": 246191
+        },
+        {
+          "team": "liv",
+          "playerId": 233731
+        },
+        {
+          "team": "liv",
+          "playerId": 242516
+        },
+        {
+          "team": "liv",
+          "playerId": 239837
+        }
+      ],
+      "homeCoach": "N"
     }
   }
 }
